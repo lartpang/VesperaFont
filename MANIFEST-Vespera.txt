@@ -16,8 +16,8 @@ wedge serifs (5% reach), a Wei Bei movement
 (horizontals rising about 4.3 degrees, mid-height lifted 4.5%) and a light
 optical treatment (+6 vertical units). Mono refits the same
 drawings to a 640-unit cell (serif retraction,
-stem-compensated condensing, serif extension for narrow letters) and adds box
-drawing, block elements and Powerline separators.
+stem-compensated condensing, serif extension for narrow letters) and adds all 128
+box-drawing characters, block elements and Powerline separators.
 Each family is also packed as one OpenType Collection (.otc) holding all six
 styles; every member is byte-identical, table for table, to its standalone OTF.
 
@@ -27,7 +27,8 @@ brought back inward to Pagella X Bold's widths. The roman uses
 single-storey a and g. Italics are the TeX Gyre Pagella Italic cursive with
 longer entry and exit strokes and swash feet on A, M and N, at 10 degrees.
 OpenType layout tables (GSUB, GPOS) come from the source; mark anchors are
-transformed with each glyph's outline.
+transformed with each glyph's outline. Mono keeps only ccmp, locl (Romanian
+and Moldavian comma-below s and t), mark and mkmk: no ligatures or kerning.
 
 The original source font and notices are retained. The complete original
 TeX Gyre work is available at https://ctan.org/tex-archive/fonts/tex-gyre .
@@ -46,7 +47,7 @@ Pagella X Italic、Bold 与 BoldItalic，以提取出的参数保存。
 标点与笔画模型。Display 沿用 Pagella X 的字宽、墨迹位置与字偶距，只重绘字形：所有
 笔画末端约 45° 刀刻斜切、克制的楔形衬线（外延 5%）、魏碑笔势（横画右上扬约 4.3°、
 字腰上提 4.5%），以及轻度光学处理（竖笔 +6 单位）。Mono 把同一套字形适配到 640
-单位字宽（收短衬线、按竖笔补偿压缩、为窄字母延长衬线），并加入框线、块元素与
+单位字宽（收短衬线、按竖笔补偿压缩、为窄字母延长衬线），并加入全部 128 个制表符、块元素与
 Powerline 分隔符。每个字族另打包为一个包含全部 6 个样式的 OpenType 合集（.otc），
 其中每个成员与对应的单独 OTF 逐表、逐字节相同。
 
@@ -54,7 +55,8 @@ Powerline 分隔符。每个字族另打包为一个包含全部 6 个样式的 
 (-26, -6) 与 (+50, +18) 单位，Bold 随后向内收回到 Pagella X Bold 的字宽。正体使用
 单层 a 与 g。斜体为 TeX Gyre Pagella Italic 的书写体，入笔与出笔加长，A、M、N 带
 花式脚，倾斜 10°。OpenType 布局表（GSUB、GPOS）取自源字体，变音符锚点随每个字形
-的轮廓一同变换。
+的轮廓一同变换。Mono 只保留 ccmp、locl（罗马尼亚语与摩尔多瓦语的下加逗号 s、t）、
+mark 与 mkmk，不含连字与字偶距。
 
 原始源字体及其声明均予保留。完整的 TeX Gyre 原作见
 https://ctan.org/tex-archive/fonts/tex-gyre 。字体按 licenses/GUST-FONT-LICENSE.txt

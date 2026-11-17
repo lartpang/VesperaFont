@@ -39,7 +39,8 @@ def export_font(data, output, config, style):
     if config.monospaced:
         tables.pop('kern', None)
         tables['GPOS'] = layout_features(tables['GPOS'], {'mark', 'mkmk'})
-        tables['GSUB'] = layout_features(tables['GSUB'], {'ccmp'})
+        # No ligatures or kerning in the cell; locl keeps Romanian comma-below s and t.
+        tables['GSUB'] = layout_features(tables['GSUB'], {'ccmp', 'locl'})
     tables['cmap'] = cmap_table(data['cmap'])
     head = bytearray(tables['head'])
     head[4:8] = P('>I', round(float(config.font_version) * 65536))

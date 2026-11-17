@@ -195,6 +195,6 @@ def adapt_monospace(design, config, style, workdir):
                           stroke_gain=(gx, gy), condensed_glyphs=condensed,
                           extended_serifs=extended, terminal_codepoints=sorted(terminal),
                           box_line_weight=light, glyphs=len(data['glyphs']),
-                          mapped_codepoints=len(data['cmap']), layout_features=['ccmp', 'mark', 'mkmk'],
+                          mapped_codepoints=len(data['cmap']), layout_features=['ccmp', 'locl', 'mark', 'mkmk'],
                           source_sha256=config.source_sha256)
     return data

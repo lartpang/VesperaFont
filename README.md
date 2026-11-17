@@ -25,12 +25,12 @@ The specimens are annotated in Chinese.
 - **Pagella X spacing**: the Regular, Italic, Bold and Bold Italic of Display have the same advances and kerning as the matching TeX Gyre Pagella X fonts used by newpxtext, so they can replace them without changing line lengths.
 - **Simplified letters**: the roman uses single-storey a and g; the italic is based on the Pagella X Italic cursive, with longer entry and exit strokes and swash feet on A, M and N.
 - **Three weights, roman and italic**: Light (300), Regular (400) and Bold (700), each with an italic.
-- **Mono for code and terminals**: every glyph is 640 units wide, confusable characters (0/O, 1/l/I) are clearly distinct, and box drawing, block elements and Powerline separators are complete.
+- **Mono for code and terminals**: every glyph is 640 units wide, confusable characters (0/O, 1/l/I) are clearly distinct, all 128 box-drawing characters, the 32 block elements and the Powerline separators are drawn to the cell, and Romanian text still gets comma-below ș and ț.
 
 | Family | Glyphs | Characters |
 | --- | --- | --- |
 | Vespera Display | 1,551 | 1,201 |
-| Vespera Mono | 1,628 | 1,278 |
+| Vespera Mono | 1,699 | 1,349 |
 
 ## Download and use
 

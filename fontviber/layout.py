@@ -11,25 +11,61 @@ def layout_features(table, wanted):
 
     Lookup offsets are relative to the LookupList or Lookup table; copying the
     entire original LookupList preserves contextual lookup references.
+
+    Scripts and language systems keep their own feature sets, so language-specific
+    features such as Romanian locl stay tied to their language. A language system
+    left with no features is dropped (it then falls back to its script's default),
+    and so is a script left with none.
     """
-    fl, ll = U('>HH',table,6)
-    found=[]
-    for i in range(U('>H',table,fl)[0]):
-        tag,off=U('>4sH',table,fl+2+i*6)
+    sl, fl, ll = U('>HHH', table, 4)
+    keep, kept = {}, []
+    for i in range(U('>H', table, fl)[0]):
+        tag, off = U('>4sH', table, fl + 2 + i * 6)
         if tag.decode() not in wanted:
             continue
-        start=fl+off
-        count=U('>H',table,start+2)[0]
-        found.append((tag,table[start+4:start+4+count*2]))
-    records=b''; bodies=b''
-    for tag,indices in found:
-        records += tag+P('>H',2+6*len(found)+len(bodies))
-        bodies += P('>HH',0,len(indices)//2)+indices
-    features=P('>H',len(found))+records+bodies
-    lang=P('>HHH',0,0xFFFF,len(found))+b''.join(P('>H',i) for i in range(len(found)))
-    script=P('>HH',4,0)+lang
-    scripts=P('>H',2)+b'DFLT'+P('>H',14)+b'latn'+P('>H',14+len(script))+script+script
-    return P('>IHHH',0x10000,10,10+len(scripts),10+len(scripts)+len(features))+scripts+features+table[ll:]
+        params, count = U('>HH', table, fl + off)
+        assert params == 0, f'feature {tag.decode()} has parameters'
+        keep[i] = len(keep)
+        kept.append((tag, table[fl + off:fl + off + 4 + count * 2]))
+    # Feature offsets are relative to the FeatureList: count, records, then bodies.
+    features, at = P('>H', len(kept)), 2 + 6 * len(kept)
+    for tag, body in kept:
+        features += tag + P('>H', at)
+        at += len(body)
+    features += b''.join(body for _, body in kept)
+
+    def langsys(p):
+        required, count = U('>HH', table, p + 2)
+        indices = [keep[i] for i in U(f'>{count}H', table, p + 6) if i in keep]
+        if not indices and keep.get(required) is None:
+            return None
+        return P('>HHH', 0, keep.get(required, 0xFFFF), len(indices)) + P(f'>{len(indices)}H', *indices)
+
+    scripts = []
+    for i in range(U('>H', table, sl)[0]):
+        tag, off = U('>4sH', table, sl + 2 + i * 6)
+        s = sl + off
+        default_off, count = U('>HH', table, s)
+        default = langsys(s + default_off) if default_off else None
+        langs = [(t, ls) for t, o in (U('>4sH', table, s + 4 + j * 6) for j in range(count))
+                 if (ls := langsys(s + o)) is not None]
+        if default is None and not langs:
+            continue
+        head = 4 + 6 * len(langs)
+        body, recs = b'', b''
+        if default is not None:
+            body = default
+        for t, ls in langs:
+            recs += t + P('>H', head + len(body))
+            body += ls
+        scripts.append((tag, P('>HH', head if default is not None else 0, len(langs)) + recs + body))
+    script_list, at = P('>H', len(scripts)), 2 + 6 * len(scripts)
+    for tag, body in scripts:
+        script_list += tag + P('>H', at)
+        at += len(body)
+    script_list += b''.join(body for _, body in scripts)
+    return (P('>IHHH', 0x10000, 10, 10 + len(script_list), 10 + len(script_list) + len(features))
+            + script_list + features + table[ll:])
 
 
 def transform_anchors(table, glyphs):

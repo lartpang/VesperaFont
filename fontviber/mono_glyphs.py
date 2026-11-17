@@ -1,6 +1,8 @@
 """Terminal glyphs for the 640-unit cell: box drawing, block elements, Powerline."""
 from __future__ import annotations
 
+import unicodedata
+
 from .metrics import ASCENT, CELL, DESCENT
 
 MID = (ASCENT + DESCENT) / 2
@@ -20,19 +22,29 @@ def rect(x0, y0, x1, y1):
     return polygon([(x0, y0), (x0, y1), (x1, y1), (x1, y0)])
 
 
-ARMS = {'L': (0, MID, C, MID), 'R': (C, MID, CELL, MID), 'U': (C, MID, C, ASCENT), 'D': (C, DESCENT, C, MID)}
+def lines(weights):
+    """Light and heavy arms, each with its own weight ({'L': 46, 'D': 85, ...}).
 
-
-def single(directions, weight, fraction=None):
-    """Arms meet in one union square; fraction draws an arm partially (half lines)."""
+    An arm runs on past the centre across the perpendicular arms, so corners and
+    tees close cleanly; with no perpendicular arm it runs into the opposite arm
+    only when that one is at least as heavy, so a heavy arm never pokes out of a
+    light one.
+    """
+    across = {axis: max((weights[a] for a in axis if a in weights), default=0) for axis in ('LR', 'UD')}
     out = []
-    for arm in directions:
-        x0, y0, x1, y1 = ARMS[arm]
-        if x0 == x1:
-            out += rect(x0 - weight / 2, y0, x1 + weight / 2, y1)
+    for arm, w in weights.items():
+        axis, other = ('LR', 'UD') if arm in 'LR' else ('UD', 'LR')
+        opposite = weights.get(axis.replace(arm, ''), 0)
+        reach = across[other] / 2 if across[other] else (opposite / 2 if opposite >= w else 0)
+        if arm == 'L':
+            out += rect(0, MID - w / 2, C + reach, MID + w / 2)
+        elif arm == 'R':
+            out += rect(C - reach, MID - w / 2, CELL, MID + w / 2)
+        elif arm == 'D':
+            out += rect(C - w / 2, DESCENT, C + w / 2, MID + reach)
         else:
-            out += rect(x0, y0 - weight / 2, x1, y1 + weight / 2)
-    return out + rect(C - weight / 2, MID - weight / 2, C + weight / 2, MID + weight / 2)
+            out += rect(C - w / 2, MID - reach, C + w / 2, ASCENT)
+    return out
 
 
 def double(arms, weight):
@@ -64,6 +76,65 @@ def double(arms, weight):
             for a, b in spans:
                 out += rect(a, line - h, b, line + h) if horizontal else rect(line - h, a, line + h, b)
     return out
+
+
+def single_double(arms, doubled, weight):
+    """One axis drawn double, the other single (╒ ╞ ╪ ...). The double lines start at
+    the single line; a single arm reaches the far double line at a corner and the
+    near one at a tee."""
+    o, h = weight * 1.4, weight / 2
+    if doubled == 'LR':
+        seg = lambda a, b, pos: rect(a, pos - h, b, pos + h)
+        double_range, centre, single_range, line = (0, CELL), C, (DESCENT, ASCENT), MID
+        single_axis = 'DU'
+    else:
+        seg = lambda a, b, pos: rect(pos - h, a, pos + h, b)
+        double_range, centre, single_range, line = (DESCENT, ASCENT), MID, (0, CELL), C
+        single_axis = 'LR'
+        doubled = 'DU'
+    before, after = (a in arms for a in doubled)
+    corner = before != after
+    a, b = (double_range[0] if before else centre - h), (double_range[1] if after else centre + h)
+    out = seg(a, b, line - o) + seg(a, b, line + o)
+    low, high = (a in arms for a in single_axis)
+    if low and high:
+        span = single_range
+    elif low:
+        span = (single_range[0], (line + o + h) if corner else (line - o + h))
+    else:
+        span = ((line - o - h) if corner else (line + o - h), single_range[1])
+    pos = centre
+    return out + (rect(span[0], pos - h, span[1], pos + h) if doubled == 'DU' else rect(pos - h, span[0], pos + h, span[1]))
+
+
+def diagonal(rising, weight):
+    """Corner to corner of the cell, weight measured across the stroke."""
+    height = ASCENT - DESCENT
+    dx = weight * (CELL ** 2 + height ** 2) ** .5 / height
+    if rising:
+        return polygon([(0, DESCENT), (dx, DESCENT), (CELL, ASCENT), (CELL - dx, ASCENT)])
+    return polygon([(0, ASCENT), (CELL - dx, DESCENT), (CELL, DESCENT), (dx, ASCENT)])
+
+
+KINDS = ('LIGHT', 'HEAVY', 'SINGLE', 'DOUBLE')
+DIRECTIONS = {'LEFT': 'L', 'RIGHT': 'R', 'UP': 'U', 'DOWN': 'D', 'HORIZONTAL': 'LR', 'VERTICAL': 'UD'}
+
+
+def line_arms(cp):
+    """Arms and their kind from the Unicode name, e.g. 'DOWN LIGHT AND RIGHT HEAVY'
+    -> {'D': 'LIGHT', 'R': 'HEAVY'}; None for dashes, arcs and diagonals."""
+    name = unicodedata.name(chr(cp)).removeprefix('BOX DRAWINGS ')
+    if any(word in name for word in ('DASH', 'ARC', 'DIAGONAL')):
+        return None
+    parts = []
+    for part in name.split(' AND '):
+        words = part.split()
+        assert all(w in KINDS or w in DIRECTIONS for w in words), name
+        kind = next((w for w in words if w in KINDS), None)
+        parts.append((kind, ''.join(DIRECTIONS[w] for w in words if w in DIRECTIONS)))
+    given = {kind for kind, _ in parts if kind}
+    assert len(given) == 1 or all(kind for kind, _ in parts), name
+    return {arm: kind or next(iter(given)) for kind, arms in parts for arm in arms}
 
 
 def rounded(weight, radius=C * .78):
@@ -109,18 +180,27 @@ def dashed(horizontal, count, weight):
 
 
 def terminal_drawings(light):
-    """Box drawing, all 32 block elements and Powerline separators.
+    """All 128 box-drawing characters, all 32 block elements and Powerline separators.
 
     Line weights follow the font weight so frames sit with the text around them.
     """
     heavy = round(light * 1.85)
     d = {}
-    dirs = ['LR', 'UD', 'RD', 'LD', 'RU', 'LU', 'URD', 'ULD', 'LRD', 'LRU', 'LURD']
-    for chars, weight in [('─│┌┐└┘├┤┬┴┼', light), ('━┃┏┓┗┛┣┫┳┻╋', heavy)]:
-        for ch, arms in zip(chars, dirs):
-            d[ord(ch)] = single(arms, weight)
-    for ch, arms in zip('═║╔╗╚╝╠╣╦╩╬', dirs):
-        d[ord(ch)] = double(arms, light)
+    # Every line character of U+2500-257F, read from its Unicode name.
+    for cp in range(0x2500, 0x2580):
+        arms = line_arms(cp)
+        if arms is None:
+            continue
+        kinds = set(arms.values())
+        if 'DOUBLE' not in kinds:
+            d[cp] = lines({arm: heavy if kind == 'HEAVY' else light for arm, kind in arms.items()})
+        elif kinds == {'DOUBLE'}:
+            d[cp] = double(''.join(arms), light)
+        else:
+            d[cp] = single_double(''.join(arms), 'LR' if arms.get('L', arms.get('R')) == 'DOUBLE' else 'UD', light)
+    d[0x2571] = diagonal(True, light)
+    d[0x2572] = diagonal(False, light)
+    d[0x2573] = diagonal(True, light) + diagonal(False, light)
     arc = rounded(light)
     d[ord('╭')] = arc
     d[ord('╮')] = mirror(arc, True, False)
@@ -131,12 +211,6 @@ def terminal_drawings(light):
             (True, 4, light), (True, 4, heavy), (False, 4, light), (False, 4, heavy),
             (True, 2, light), (True, 2, heavy), (False, 2, light), (False, 2, heavy)]):
         d[ord(ch)] = dashed(horizontal, count, weight)
-    for ch, arm, weight in zip('╴╵╶╷╸╹╺╻', 'LURDLURD', [light] * 4 + [heavy] * 4):
-        x0, y0, x1, y1 = ARMS[arm]
-        if x0 == x1:
-            d[ord(ch)] = rect(x0 - weight / 2, y0, x1 + weight / 2, y1)
-        else:
-            d[ord(ch)] = rect(x0, y0 - weight / 2, x1, y1 + weight / 2)
     # Continuous underscore; its width exactly matches its advance.
     d[ord('_')] = rect(0, -100 - light / 2, CELL, -100 + light / 2 + 4)
     h = ASCENT - DESCENT
