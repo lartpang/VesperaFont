@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "source": "../sources/texgyrepagella-regular.txt",
+  "source_sha256": "ff8920a7d55f525a94ff02e4f35d847c1be059459a27c9e90be94769586e6483",
+  "metrics_source": "../sources/spacing/TeXGyrePagellaX-Regular.json.gz",
+  "metrics_sha256": "f72c17473f1a8b3b5f7b5dc274f850bbb1aeb60d249112707570394c781470b1",
+  "italic_source": "../sources/texgyrepagella-italic.txt",
+  "italic_source_sha256": "f3a512dfc5f7ac886239c1b6e6664627cafe423807556fa5b9f5264531629070",
+  "italic_metrics_source": "../sources/spacing/TeXGyrePagellaX-Italic.json.gz",
+  "italic_metrics_sha256": "e246c62eafa1f285ec621e49d317d0304329878d942c6d08d3cb88bd1dc5f60b",
+  "family": "Vespera Mono",
+  "version": "0.0.1",
+  "spacing": "monospace",
+  "styles": ["Light", "Light Italic", "Regular", "Italic", "Bold", "Bold Italic"],
+  "formats": ["otf", "woff2", "otc"],
+  "output_dir": "../output/fonts"
+}

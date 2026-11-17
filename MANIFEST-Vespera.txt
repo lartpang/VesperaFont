@@ -1,0 +1,163 @@
+VESPERA 长庚 / Display and Mono
+Vespera Display 0.0.1 (OpenType 0.001) / proportional spacing / Light, Regular, Bold; roman and italic
+Vespera Mono 0.0.1 (OpenType 0.001) / monospaced / Light, Regular, Bold; roman and italic
+Modified work based on TeX Gyre Pagella Regular and Italic 2.501 (kept as
+plain-text sources); advances, ink placement and kerning of Vespera Display
+follow TeX Gyre Pagella X, Pagella X Italic, Bold and BoldItalic (newpx),
+stored as extracted parameters.
+Maintenance status of this modified work: unmaintained.
+Date of modification: 2026-11-17.
+
+Both families are generated from one drawing master in fontviber/ and share
+its letters, wedge serifs, lozenge dots, source punctuation and stroke model.
+Display takes Pagella X's advances, ink positions and kerning, and redraws
+the letters only: carved 45-degree cuts on every stroke end, restrained
+wedge serifs (5% reach), a Wei Bei movement
+(horizontals rising about 4.3 degrees, mid-height lifted 4.5%) and a light
+optical treatment (+6 vertical units). Mono refits the same
+drawings to a 640-unit cell (serif retraction,
+stem-compensated condensing, serif extension for narrow letters) and adds box
+drawing, block elements and Powerline separators.
+Each family is also packed as one OpenType Collection (.otc) holding all six
+styles; every member is byte-identical, table for table, to its standalone OTF.
+
+Math operators are reduced to 80% about the math axis with stroke compensation.
+Light and Bold apply (-26, -6) and (+50, +18) unit stroke gains; Bold is then
+brought back inward to Pagella X Bold's widths. The roman uses
+single-storey a and g. Italics are the TeX Gyre Pagella Italic cursive with
+longer entry and exit strokes and swash feet on A, M and N, at 10 degrees.
+OpenType layout tables (GSUB, GPOS) come from the source; mark anchors are
+transformed with each glyph's outline.
+
+The original source font and notices are retained. The complete original
+TeX Gyre work is available at https://ctan.org/tex-archive/fonts/tex-gyre .
+Font distribution follows licenses/GUST-FONT-LICENSE.txt and licenses/lppl.txt.
+
+中文说明
+字体中文名「长庚」：Vespera 是拉丁语的「黄昏」，与 Vesper（长庚星）同源。
+Vespera Display 0.0.1（OpenType 0.001）：比例字距；细体、常规、粗体，各含正体与斜体。
+Vespera Mono 0.0.1（OpenType 0.001）：等宽；细体、常规、粗体，各含正体与斜体。
+本作品是 TeX Gyre Pagella Regular 与 Italic 2.501 的修改版本（源字体以纯文本
+保存）；Vespera Display 的字宽、墨迹位置与字偶距沿用 newpx 的 TeX Gyre Pagella X、
+Pagella X Italic、Bold 与 BoldItalic，以提取出的参数保存。
+本修改作品的维护状态：不再维护。修改日期：2026-11-17。
+
+两个字族由 fontviber/ 中的同一份设计母版生成，共用字母、楔形衬线、菱形点、源字体
+标点与笔画模型。Display 沿用 Pagella X 的字宽、墨迹位置与字偶距，只重绘字形：所有
+笔画末端约 45° 刀刻斜切、克制的楔形衬线（外延 5%）、魏碑笔势（横画右上扬约 4.3°、
+字腰上提 4.5%），以及轻度光学处理（竖笔 +6 单位）。Mono 把同一套字形适配到 640
+单位字宽（收短衬线、按竖笔补偿压缩、为窄字母延长衬线），并加入框线、块元素与
+Powerline 分隔符。每个字族另打包为一个包含全部 6 个样式的 OpenType 合集（.otc），
+其中每个成员与对应的单独 OTF 逐表、逐字节相同。
+
+数学运算符以数学轴为中心缩小到 80%，并补偿笔画粗细。Light 与 Bold 的笔画增量分别为
+(-26, -6) 与 (+50, +18) 单位，Bold 随后向内收回到 Pagella X Bold 的字宽。正体使用
+单层 a 与 g。斜体为 TeX Gyre Pagella Italic 的书写体，入笔与出笔加长，A、M、N 带
+花式脚，倾斜 10°。OpenType 布局表（GSUB、GPOS）取自源字体，变音符锚点随每个字形
+的轮廓一同变换。
+
+原始源字体及其声明均予保留。完整的 TeX Gyre 原作见
+https://ctan.org/tex-archive/fonts/tex-gyre 。字体按 licenses/GUST-FONT-LICENSE.txt
+与 licenses/lppl.txt 分发。下面的文件清单与 SHA-256 适用于两种语言。
+
+Source repository (everything a release is built from):
+  .github/scripts/package_release.py
+  .github/scripts/release_version.py
+  .github/workflows/release.yml
+  .gitignore
+  MANIFEST-Vespera.txt
+  README.md
+  README.zh-CN.md
+  build.py
+  configs/display.json
+  configs/mono.json
+  docs/images/compare-display.png
+  docs/images/compare-mono.png
+  docs/images/display.png
+  docs/images/mono.png
+  fontviber/__init__.py
+  fontviber/cli.py
+  fontviber/config.py
+  fontviber/coretext.py
+  fontviber/design.py
+  fontviber/export.py
+  fontviber/font_io.py
+  fontviber/glyphs.py
+  fontviber/layout.py
+  fontviber/metrics.py
+  fontviber/mono.py
+  fontviber/mono_glyphs.py
+  fontviber/pipeline.py
+  fontviber/shaping.py
+  fontviber/source.py
+  fontviber/spacing.py
+  fontviber/styles.py
+  fontviber/ufo.py
+  fontviber/validation.py
+  licenses/GUST-FONT-LICENSE.txt
+  licenses/MANIFEST-TeX-Gyre-Pagella.txt
+  licenses/MANIFEST-newpx.txt
+  licenses/README-TeX-Gyre-Pagella.txt
+  licenses/lppl.txt
+  sources/README.md
+  sources/README.zh-CN.md
+  sources/spacing/TeXGyrePagellaX-Bold.json.gz
+  sources/spacing/TeXGyrePagellaX-BoldItalic.json.gz
+  sources/spacing/TeXGyrePagellaX-Italic.json.gz
+  sources/spacing/TeXGyrePagellaX-Regular.json.gz
+  sources/texgyrepagella-italic.txt
+  sources/texgyrepagella-regular.txt
+
+Release archive Vespera-<version>.zip (built by .github/workflows/release.yml):
+  Vespera-<version>/otf/VesperaDisplay-Bold.otf
+  Vespera-<version>/otf/VesperaDisplay-BoldItalic.otf
+  Vespera-<version>/otf/VesperaDisplay-Italic.otf
+  Vespera-<version>/otf/VesperaDisplay-Light.otf
+  Vespera-<version>/otf/VesperaDisplay-LightItalic.otf
+  Vespera-<version>/otf/VesperaDisplay-Regular.otf
+  Vespera-<version>/otf/VesperaMono-Bold.otf
+  Vespera-<version>/otf/VesperaMono-BoldItalic.otf
+  Vespera-<version>/otf/VesperaMono-Italic.otf
+  Vespera-<version>/otf/VesperaMono-Light.otf
+  Vespera-<version>/otf/VesperaMono-LightItalic.otf
+  Vespera-<version>/otf/VesperaMono-Regular.otf
+  Vespera-<version>/woff2/VesperaDisplay-Bold.woff2
+  Vespera-<version>/woff2/VesperaDisplay-BoldItalic.woff2
+  Vespera-<version>/woff2/VesperaDisplay-Italic.woff2
+  Vespera-<version>/woff2/VesperaDisplay-Light.woff2
+  Vespera-<version>/woff2/VesperaDisplay-LightItalic.woff2
+  Vespera-<version>/woff2/VesperaDisplay-Regular.woff2
+  Vespera-<version>/woff2/VesperaMono-Bold.woff2
+  Vespera-<version>/woff2/VesperaMono-BoldItalic.woff2
+  Vespera-<version>/woff2/VesperaMono-Italic.woff2
+  Vespera-<version>/woff2/VesperaMono-Light.woff2
+  Vespera-<version>/woff2/VesperaMono-LightItalic.woff2
+  Vespera-<version>/woff2/VesperaMono-Regular.woff2
+  Vespera-<version>/otc/VesperaDisplay.otc
+  Vespera-<version>/otc/VesperaMono.otc
+  Vespera-<version>/README.md
+  Vespera-<version>/README.zh-CN.md
+  Vespera-<version>/MANIFEST-Vespera.txt
+  Vespera-<version>/docs/images/compare-display.png
+  Vespera-<version>/docs/images/compare-mono.png
+  Vespera-<version>/docs/images/display.png
+  Vespera-<version>/docs/images/mono.png
+  Vespera-<version>/licenses/GUST-FONT-LICENSE.txt
+  Vespera-<version>/licenses/MANIFEST-TeX-Gyre-Pagella.txt
+  Vespera-<version>/licenses/MANIFEST-newpx.txt
+  Vespera-<version>/licenses/README-TeX-Gyre-Pagella.txt
+  Vespera-<version>/licenses/lppl.txt
+
+The release also attaches VesperaDisplay-<version>.otc, VesperaMono-<version>.otc
+and SHA256SUMS.txt with the checksums of the assets of that release.
+
+SHA-256 of the sources. The text sources (format in fontviber/source.py) were
+converted from texgyrepagella-regular.otf (44e64260716d8f2bbe412baa1ee99b7c995190ac4573177c24def0b9200438c7)
+and texgyrepagella-italic.otf (069bb27f48eb98a741715227fc6e4b7baf3639c29fc13925f70d1ed8884ac29a);
+the spacing parameters are extracted from TeX Gyre Pagella X (sources/README.md):
+ff8920a7d55f525a94ff02e4f35d847c1be059459a27c9e90be94769586e6483  sources/texgyrepagella-regular.txt
+f3a512dfc5f7ac886239c1b6e6664627cafe423807556fa5b9f5264531629070  sources/texgyrepagella-italic.txt
+cab2e03efe1170d431be85a90e556d2d9355614957629161294dd970bfaaf957  sources/spacing/TeXGyrePagellaX-Bold.json.gz
+31305eec9835f9b33dbf37db4eff528f3b7d0b4ff051f691c5e1ed1a98c15d4a  sources/spacing/TeXGyrePagellaX-BoldItalic.json.gz
+e246c62eafa1f285ec621e49d317d0304329878d942c6d08d3cb88bd1dc5f60b  sources/spacing/TeXGyrePagellaX-Italic.json.gz
+f72c17473f1a8b3b5f7b5dc274f850bbb1aeb60d249112707570394c781470b1  sources/spacing/TeXGyrePagellaX-Regular.json.gz

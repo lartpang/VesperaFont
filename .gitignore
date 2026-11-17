@@ -1,0 +1,20 @@
+# The repository holds only what a release needs: the build code (build.py,
+# fontviber/, configs/), the text font sources and spacing parameters (sources/),
+# the release workflow (.github/), and the documents and licences packed into
+# every release (README.md, README.zh-CN.md, their images in docs/images/,
+# MANIFEST-Vespera.txt, licenses/). Everything below is rebuilt or local.
+
+# Build outputs: release.yml rebuilds every font from sources/ for each tag.
+output/
+dist/
+
+# Development material the release does not use.
+tests/
+posters/
+
+# Local tooling, environments and caches.
+.claude/
+.venv/
+__pycache__/
+*.py[cod]
+.DS_Store
